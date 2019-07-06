@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -19,8 +20,7 @@ class RegisterController extends Controller
     | validation and creation. By default this controller uses a trait to
     | provide this functionality without requiring any additional code.
     |
-    */
-
+     */
     use RegistersUsers;
 
     /**
@@ -29,6 +29,16 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = '/home';
+
+    protected $validColumns = [
+        'fname'     =>   'required|string|max:255',
+        'lname'     =>   'required|string|max:255',
+        'email'     =>   'required|string|email|max:100|unique:users',
+        'phone'     =>   'required|numeric|digits_between:10,13|unique:users',
+        'bdate'     =>   'required|date',
+        'gender'    =>   'required|string|max:10',
+        'password'  =>   'required|string|min:8|confirmed',
+    ];
 
     /**
      * Create a new controller instance.
@@ -48,11 +58,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        return Validator::make($data, $this->validColumns);
     }
 
     /**
@@ -61,12 +67,20 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
+
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'fname' => $data['fname'],
+            'lname' => $data['lname'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
+            'bdate' => $data['bdate'],
+            'gender' => $data['gender'],
             'password' => Hash::make($data['password']),
+            'register_ip' => request()->ip(),
+            'active_token' => Str::random(),
+            'remember_token' => Str::random(),
         ]);
     }
 }
