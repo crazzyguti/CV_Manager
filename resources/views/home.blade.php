@@ -14,9 +14,9 @@
                     </div>
                     @endif
 
-                    @alert(['type' => 'danger',"title" => "Success"])
-                    You are logged in! => {{ Auth::user()->fname }}
-                    @endalert
+
+
+
                 </div>
             </div>
         </div>

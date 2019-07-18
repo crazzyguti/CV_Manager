@@ -2,8 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
-use Illuminate\Support\Str;
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,14 +15,22 @@ use Faker\Generator as Faker;
 | your application. Factories provide a convenient way to generate new
 | model instances for testing / seeding your application's database.
 |
-*/
+ */
 
 $factory->define(User::class, function (Faker $faker) {
+    $gender = $faker->randomElement(['male', 'female']);
+
     return [
-        'name' => $faker->name,
+        'fname' => $faker->firstName(),
+        'lname' => $faker->lastName(),
         'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'phone' => $faker->unique()->e164PhoneNumber,
+        'bdate' => $faker->date(),
+        'gender' => $gender,
+        'register_ip' => $faker->ipv4,
+        'password' => Hash::make('11223344'),
         'remember_token' => Str::random(10),
+        'active_token' => Str::random(10),
+        'email_verified_at' => now(),
     ];
 });

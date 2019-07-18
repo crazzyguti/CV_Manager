@@ -12,6 +12,8 @@ class User extends Authenticatable
 
     protected $guarded = [];
 
+    protected $hidden = array('password');
+
     public function role()
     {
         return $this->belongsToMany('Role');
@@ -20,6 +22,11 @@ class User extends Authenticatable
     public function attempts()
     {
         return $this->hasMany('Login_attempts');
+    }
+
+    public function users_detail()
+    {
+        return $this->hasMany('users_detail', "user", "id");
     }
 
 }

@@ -15,14 +15,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('role', 'RoleController');
-Route::resource('user', 'UserController');
-Route::resource('permission', 'PermissionController');
-Route::resource('permission_role', 'Permission_roleController');
-Route::resource('role_user', 'Role_userController');
-Route::resource('login_attempts', 'login_attemptsController');
-Route::resource('userdetail', 'UserDetailController');
+
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index');
+
+
+Route::get('crud', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@builder');
+
+Route::get('field_template', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@fieldTemplate');
+
+Route::get('relation_field_template', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@relationFieldTemplate');
+
+Route::post('generator_builder/generate', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generate');
+
+Route::post('generator_builder/rollback', '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@rollback');
+
+Route::post(
+    'generator_builder/generate-from-file',
+    '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
+);
